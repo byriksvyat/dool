@@ -1,0 +1,38 @@
+import random
+
+# Константы для размера игрового поля и форм блоков
+WIDTH = 10
+HEIGHT = 20
+SHAPES = [
+    [(0, 0), (1, 0), (0, 1), (1, 1)],  # квадрат
+    [(0, 0), (1, 0), (2, 0), (3, 0)],  # палка
+    [(0, 0), (1, 0), (2, 0), (2, 1)],  # буква L
+    [(0, 0), (1, 0), (2, 0), (0, 1)],  # обратная буква L
+    [(0, 1), (1, 1), (2, 1), (2, 0)],  # буква Z
+    [(0, 0), (1, 0), (2, 0), (2, 1)],  # обратная буква Z
+    [(0, 1), (1, 1), (1, 0), (2, 0)]   # буква T
+]
+
+def new_block():
+    """Создает новый блок со случайной формой"""
+    shape = random.choice(SHAPES)
+    block = {'shape': shape, 'x': WIDTH // 2 - 2, 'y': 0}
+    return block
+
+def rotate_block(block):
+    """Поворачивает блок на 90 градусов по часовой стрелке"""
+    shape = block['shape']
+    new_shape = [(y, -x) for (x, y) in shape]
+    block['shape'] = new_shape
+
+def move_block(block, dx, dy):
+    """Перемещает блок на dx позиций вправо и на dy позиций вниз"""
+    block['x'] += dx
+    block['y'] += dy
+
+def check_collision(board, block, dx=0, dy=0):
+    """Проверяет, столкнулся ли блок со стенами или другими блоками на доске"""
+    for (x, y) in block['shape']:
+        if not (0 <= block['x'] + x + dx < WIDTH and 0 <= block['y'] + y + dy < HEIGHT):
+            return True
+        if board[block['y'] +
